@@ -4,7 +4,9 @@ var ctx = c.getContext("2d");
 //we have a 400 by 400 square to work with
 
 //This starts the recursive tree drawLine(startx,starty,lengthOfBranch,angle,color,branchPieces)
-createBranch(400,800,50,-90,randomColor(),10)
+createBranch(200,600,30,-90,randomDarkColor(),8)
+createBranch(400,600,50,-90,randomLightColor(),10)
+createBranch(600,600,30,-90,randomColor(),9)
 
 function createBranch(x1,y1,length,angle,color,branchPieces){
         //sin and cos only work with radians so convert
