@@ -6,26 +6,6 @@ var ctx = c.getContext("2d");
 //This starts the recursive tree drawLine(startx,starty,lengthOfBranch,angle,color,branchPieces)
 createBranch(400,800,50,-90,randomColor(),10)
 
-
-//do the actual drawing on the canvas
-function drawLine(x1,y1,x2,y2,color,width){
-    ctx.beginPath()
-    ctx.moveTo(x1,y1);
-    ctx.lineTo(x2,y2);
-    ctx.lineWidth = width;
-    ctx.strokeStyle = color
-    ctx.stroke();
-}
-
-function drawLeaf(x,y,color,radius){
-    ctx.beginPath()
-    ctx.moveTo(x,y);
-    ctx.arc(x,y,radius,0,2*Math.PI)
-    ctx.strokeStyle = color
-    ctx.fill()
-    ctx.stroke();
-}
-
 function createBranch(x1,y1,length,angle,color,branchPieces){
         //sin and cos only work with radians so convert
         var radian = (Math.PI/180.0)* angle;
@@ -59,8 +39,6 @@ function createBranch(x1,y1,length,angle,color,branchPieces){
     },500)    
 }
 
-
-
 //function to make sure a value always stays within an expected range used to make sure colors dont run outside 0-255
 function clamp(value,min,max){
     if (value<max){
@@ -79,6 +57,7 @@ function randomColor(){
     var b = Math.floor(Math.random()*255)
     return `rgb(${r},${g},${b})`
 }
+
 //forces the colors towards the darker spectrum by limiting the maximum value of all three to 100-300 out of 255*3=765 
 function randomDarkColor(){
     var total = Math.floor(Math.random()*200)+100;
@@ -89,6 +68,7 @@ function randomDarkColor(){
     var g = clamp(Math.floor(Math.random()*total),0,255);
     return `rgb(${r},${g},${b})`
 }
+
 //forces the colors towards the lighter spectrum by limiting the maximum value of all three to 565 to 765
 function randomLightColor(){
     var total = Math.floor(Math.random()*200)+565;
@@ -100,6 +80,24 @@ function randomLightColor(){
     return `rgb(${r},${g},${b})`
 }
 
+//do the actual drawing on the canvas
+function drawLine(x1,y1,x2,y2,color,width){
+    ctx.beginPath()
+    ctx.moveTo(x1,y1);
+    ctx.lineTo(x2,y2);
+    ctx.lineWidth = width;
+    ctx.strokeStyle = color
+    ctx.stroke();
+}
+
+function drawLeaf(x,y,color,radius){
+    ctx.beginPath()
+    ctx.moveTo(x,y);
+    ctx.arc(x,y,radius,0,2*Math.PI)
+    ctx.strokeStyle = color
+    ctx.fill()
+    ctx.stroke();
+}
 
 
 
