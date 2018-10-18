@@ -4,9 +4,9 @@ var ctx = c.getContext("2d");
 //we have a 400 by 400 square to work with
 
 //This starts the recursive tree drawLine(startx,starty,lengthOfBranch,angle,color,branchPieces)
-createBranch(200,600,30,-90,randomDarkColor(),8)
+//createBranch(200,600,30,-90,randomDarkColor(),8)
 createBranch(400,600,50,-90,randomLightColor(),10)
-createBranch(600,600,30,-90,randomColor(),9)
+//createBranch(600,600,30,-90,randomColor(),9)
 
 function createBranch(x1,y1,length,angle,color,branchPieces){
         //sin and cos only work with radians so convert
@@ -15,6 +15,7 @@ function createBranch(x1,y1,length,angle,color,branchPieces){
         var x2 = x1+(length*Math.cos(radian));
         var y2 = y1+(length*Math.sin(radian));
 
+        //draw the actual branch to the canvas
         drawLine(x1,y1,x2,y2,color,branchPieces)
 
         //decide new random factors
@@ -36,7 +37,7 @@ function createBranch(x1,y1,length,angle,color,branchPieces){
         }
         else{
             //here is where you would draw a leaf at the end of a branch
-            //x,y,color,radius
+            //drawLeaf(x,y,color,radius)
             drawLeaf(x2,y2,randomColor(),Math.random()*2)
         }
     },50)    
@@ -67,10 +68,7 @@ function adjustColor(colorString){
     b = clamp(b,0,255)
     
     return `rgb(${r},${g},${b})`
-    //console.log(`rgb(${r},${g},${b})`)
-    //console.log(r,g,b)
 }
-
 
 //The simpliest form of making a random color true random anything goes
 function randomColor(){
@@ -107,7 +105,7 @@ function drawLine(x1,y1,x2,y2,color,width){
     ctx.beginPath()
     ctx.moveTo(x1,y1);
     ctx.lineTo(x2,y2);
-    ctx.lineWidth = width;
+    ctx.lineWidth = clamp(width,1,100); // just ensure the width is acutally positive
     ctx.strokeStyle = color
     ctx.stroke();
 }
