@@ -37,7 +37,7 @@ function createBranch(x1,y1,length,angle,color,branchPieces){
             //x,y,color,radius
             drawLeaf(x2,y2,randomColor(),Math.random()*2)
         }
-    },250)    
+    },50)    
 }
 
 //function to make sure a value always stays within an expected range used to make sure colors dont run outside 0-255
