@@ -21,22 +21,23 @@ function createBranch(x1,y1,length,angle,color,branchPieces){
         var randomAngle1 = angle-Math.random()*35
         var randomAngle2 = angle+Math.random()*35
         //colors get more complex so moved them in to their own function
-        //also try randomDarkColor() and randomLightColor() in place of randomColor()
-        var color1= randomColor()
-        var color2= randomColor()
+        
+        var color1= adjustColor(color)
+        var color2= adjustColor(color)
         
     //set delay so we can see tree grow
     setTimeout(function(){
         if (branchPieces>0){//<<< this is the exit strategy if we ran out we stop calling the functions
             createBranch(x2,y2,branchLength,randomAngle1,color1,branchPieces-branchReducer)//if we didnt reduce the branchPieces we would continue forever
             createBranch(x2,y2,branchLength,randomAngle2,color2,branchPieces-branchReducer)//branchReducer is just a random number so that some branches end up longer than others
+            adjustColor(color1);
         }
         else{
             //here is where you would draw a leaf at the end of a branch
             //x,y,color,radius
             drawLeaf(x2,y2,randomColor(),Math.random()*2)
         }
-    },500)    
+    },250)    
 }
 
 //function to make sure a value always stays within an expected range used to make sure colors dont run outside 0-255
@@ -49,6 +50,25 @@ function clamp(value,min,max){
     }
     else{return max;}
 }
+function adjustColor(colorString){
+    var newColor = colorString.replace(/[^\d,]/g, '').split(",")
+    newColor.forEach(function (color){
+        return color
+    })
+    //convert from string to int and add a random give or take 20 units
+    var r = parseInt(newColor[0],10)+(Math.floor(Math.random()*40))-20;
+    var g = parseInt(newColor[1],10)+(Math.floor(Math.random()*40))-20;
+    var b = parseInt(newColor[2],10)+(Math.floor(Math.random()*40))-20;
+    //clamp between values so they dont run away
+    r = clamp(r,0,255)
+    g = clamp(g,0,255)
+    b = clamp(b,0,255)
+    
+    return `rgb(${r},${g},${b})`
+    //console.log(`rgb(${r},${g},${b})`)
+    //console.log(r,g,b)
+}
+
 
 //The simpliest form of making a random color true random anything goes
 function randomColor(){
