@@ -103,10 +103,18 @@ function randomLightColor(){
 //do the actual drawing on the canvas
 function drawLine(x1,y1,x2,y2,color,width){
     ctx.beginPath()
+    ctx.lineWidth = clamp(width,1,100); // just ensure the width is acutally positive as it could come in negative
     ctx.moveTo(x1,y1);
     ctx.lineTo(x2,y2);
-    ctx.lineWidth = clamp(width,1,100); // just ensure the width is acutally positive
     ctx.strokeStyle = color
+    ctx.stroke();
+    //Fill gaps made from attaching two rectangles together at an angle by placing a circle inbetween
+    ctx.beginPath()
+    ctx.lineWidth = 1;
+    ctx.arc(x2,y2,clamp(width/2,0,100),0,2*Math.PI);  
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.fill();
     ctx.stroke();
 }
 
