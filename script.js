@@ -5,7 +5,13 @@ var ctx = c.getContext("2d");
 
 //This starts the recursive tree drawLine(startx,starty,lengthOfBranch,angle,color,branchPieces)
 //createBranch(200,600,30,-90,randomDarkColor(),8)
-createBranch(400,600,50,-90,randomLightColor(),10)
+setTimeout(()=>{
+    createBranch(400,600,50,-90,randomColor(),10)
+},50)
+setTimeout(()=>{
+    drawRect(0,0,800,600,"white",0.5)
+},5000)
+
 //createBranch(600,600,30,-90,randomColor(),9)
 
 function createBranch(x1,y1,length,angle,color,branchPieces){
@@ -20,7 +26,8 @@ function createBranch(x1,y1,length,angle,color,branchPieces){
 
         //decide new random factors
         var branchLength = (Math.random()*20)+10
-        var branchReducer = Math.floor(Math.random()*4)//4 is a good number smaller numbers give more branches
+        var branchReducer = Math.floor(Math.random()*2)+1//4 is a good number smaller numbers give more branches
+        //var branchReducer = 1;
         var randomAngle1 = angle-Math.random()*35
         var randomAngle2 = angle+Math.random()*35
         //colors get more complex so moved them in to their own function
@@ -33,14 +40,14 @@ function createBranch(x1,y1,length,angle,color,branchPieces){
         if (branchPieces>0){//<<< this is the exit strategy if we ran out we stop calling the functions
             createBranch(x2,y2,branchLength,randomAngle1,color1,branchPieces-branchReducer)//if we didnt reduce the branchPieces we would continue forever
             createBranch(x2,y2,branchLength,randomAngle2,color2,branchPieces-branchReducer)//branchReducer is just a random number so that some branches end up longer than others
-            adjustColor(color1);
+            //adjustColor(color1);
         }
         else{
             //here is where you would draw a leaf at the end of a branch
             //drawLeaf(x,y,color,radius)
-            drawLeaf(x2,y2,randomColor(),Math.random()*2)
+            drawLeaf(x2,y2,shuffleColor(color),(Math.random()*2)+1)
         }
-    },50)    
+    },25)    
 }
 
 //function to make sure a value always stays within an expected range used to make sure colors dont run outside 0-255
@@ -68,6 +75,51 @@ function adjustColor(colorString){
     b = clamp(b,0,255)
     
     return `rgb(${r},${g},${b})`
+}
+
+//Return the opposite color
+function inverseColor(color){
+    var newColor = color.replace(/[^\d,]/g, '').split(",")
+    newColor.forEach(function (color){
+        return color
+    })
+    //convert from string to int
+    var r = 255 - (parseInt(newColor[0],10));
+    var g = 255 - (parseInt(newColor[1],10));
+    var b = 255 - (parseInt(newColor[2],10));
+    
+    //clamp between values so they dont run away
+    r = clamp(r,0,255)
+    g = clamp(g,0,255)
+    b = clamp(b,0,255)
+    
+    return `rgb(${r},${g},${b})`
+}
+
+//swap the values of color in random direction rgb = rgb,rbg,brg,bgr,grb,gbr
+function shuffleColor(color){
+    var newColor = color.replace(/[^\d,]/g, '').split(",")
+    newColor.forEach(function (color){
+        return color
+    })
+    shuffledColor = shuffle(newColor);
+    //convert from string to int
+    var r = 255 - (parseInt(shuffledColor[0],10));
+    var g = 255 - (parseInt(shuffledColor[1],10));
+    var b = 255 - (parseInt(shuffledColor[2],10));
+    
+    return `rgb(${r},${g},${b})`
+}
+
+function shuffle(array){
+    var newArray = [];
+    var count = array.length
+    for (var i=0;i<count;i++){
+        random = Math.floor(Math.random()*array.length)
+        newArray.push(array[random])
+        array.splice(random,1)
+    }
+    return newArray;
 }
 
 //The simpliest form of making a random color true random anything goes
@@ -120,11 +172,20 @@ function drawLine(x1,y1,x2,y2,color,width){
 
 function drawLeaf(x,y,color,radius){
     ctx.beginPath()
+    ctx.strokeStyle = color
     ctx.moveTo(x,y);
     ctx.arc(x,y,radius,0,2*Math.PI)
-    ctx.strokeStyle = color
+    ctx.fillStyle = color
     ctx.fill()
     ctx.stroke();
+}
+
+function drawRect(x1,y1,x2,y2,color,alpha){
+    //ctx.beginPath
+    ctx.fillStyle = color
+    ctx.globalAlpha = alpha;
+    ctx.fillRect(x1, y1, x2, y2);
+    ctx.globalAlpha = 1;
 }
 
 
