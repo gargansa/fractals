@@ -1,16 +1,19 @@
 //Grab the canvas
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
-//we have a 400 by 400 square to work with
+
 
 //This starts the recursive tree drawLine(startx,starty,lengthOfBranch,angle,color,branchPieces)
 //createBranch(200,600,30,-90,randomDarkColor(),8)
 setTimeout(()=>{
-    createBranch(400,600,50,-90,randomColor(),10)
-},50)
-setTimeout(()=>{
-    drawRect(0,0,800,600,"white",0.5)
-},5000)
+    createBranch(400,600,50,-90,randomColor(),12)
+},5)
+// setTimeout(()=>{
+//     createBranch(200,600,50,-90,randomColor(),10)
+// },1000)
+// setTimeout(()=>{
+//     createBranch(600,600,50,-90,randomColor(),8)
+// },1500)
 
 //createBranch(600,600,30,-90,randomColor(),9)
 
@@ -26,10 +29,12 @@ function createBranch(x1,y1,length,angle,color,branchPieces){
 
         //decide new random factors
         var branchLength = (Math.random()*20)+10
+        //different branch style
+        //var branchLength = length-(Math.random()*8)
         var branchReducer = Math.floor(Math.random()*2)+1//4 is a good number smaller numbers give more branches
         //var branchReducer = 1;
-        var randomAngle1 = angle-Math.random()*35
-        var randomAngle2 = angle+Math.random()*35
+        var randomAngle1 = angle-Math.random()*40
+        var randomAngle2 = angle+Math.random()*40
         //colors get more complex so moved them in to their own function
         
         var color1= adjustColor(color)
@@ -40,14 +45,18 @@ function createBranch(x1,y1,length,angle,color,branchPieces){
         if (branchPieces>0){//<<< this is the exit strategy if we ran out we stop calling the functions
             createBranch(x2,y2,branchLength,randomAngle1,color1,branchPieces-branchReducer)//if we didnt reduce the branchPieces we would continue forever
             createBranch(x2,y2,branchLength,randomAngle2,color2,branchPieces-branchReducer)//branchReducer is just a random number so that some branches end up longer than others
-            //adjustColor(color1);
+            
+            if(Math.random()*10>9){
+                createBranch(x2,y2,branchLength,angle,color,branchPieces)
+            }
+
         }
         else{
             //here is where you would draw a leaf at the end of a branch
             //drawLeaf(x,y,color,radius)
-            drawLeaf(x2,y2,shuffleColor(color),(Math.random()*2)+1)
+            drawLeaf(x2,y2,rotateColor(color),(Math.random()*2)+1)
         }
-    },25)    
+    },5)    
 }
 
 //function to make sure a value always stays within an expected range used to make sure colors dont run outside 0-255
@@ -95,6 +104,21 @@ function inverseColor(color){
     
     return `rgb(${r},${g},${b})`
 }
+//rotate the color order rgb = gbr
+function rotateColor(color){
+    var newColor = color.replace(/[^\d,]/g, '').split(",")
+    newColor.forEach(function (color){
+        return color
+    })
+    
+    //convert from string to int
+    var r = 255 - (parseInt(newColor[1],10));
+    var g = 255 - (parseInt(newColor[2],10));
+    var b = 255 - (parseInt(newColor[0],10));
+    
+    return `rgb(${r},${g},${b})`
+}
+
 
 //swap the values of color in random direction rgb = rgb,rbg,brg,bgr,grb,gbr
 function shuffleColor(color){
@@ -159,6 +183,7 @@ function drawLine(x1,y1,x2,y2,color,width){
     ctx.moveTo(x1,y1);
     ctx.lineTo(x2,y2);
     ctx.strokeStyle = color
+    //ctx.lineJoin = "round";
     ctx.stroke();
     //Fill gaps made from attaching two rectangles together at an angle by placing a circle inbetween
     ctx.beginPath()
