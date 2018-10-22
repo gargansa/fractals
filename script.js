@@ -2,11 +2,17 @@
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
 
+var c2 = document.getElementById("overlay");
+var overlay = c2.getContext("2d");
 
+setTimeout(()=>{
+    drawRect(0,0,800,600,"white",0.6)
+},40)
 //This starts the recursive tree drawLine(startx,starty,lengthOfBranch,angle,color,branchPieces)
 //createBranch(200,600,30,-90,randomDarkColor(),8)
 setTimeout(()=>{
     createBranch(400,600,50,-90,randomColor(),12)
+    console.log("done")
 },5)
 // setTimeout(()=>{
 //     createBranch(200,600,50,-90,randomColor(),10)
@@ -36,7 +42,6 @@ function createBranch(x1,y1,length,angle,color,branchPieces){
         var randomAngle1 = angle-Math.random()*40
         var randomAngle2 = angle+Math.random()*40
         //colors get more complex so moved them in to their own function
-        
         var color1= adjustColor(color)
         var color2= adjustColor(color)
         
@@ -45,11 +50,9 @@ function createBranch(x1,y1,length,angle,color,branchPieces){
         if (branchPieces>0){//<<< this is the exit strategy if we ran out we stop calling the functions
             createBranch(x2,y2,branchLength,randomAngle1,color1,branchPieces-branchReducer)//if we didnt reduce the branchPieces we would continue forever
             createBranch(x2,y2,branchLength,randomAngle2,color2,branchPieces-branchReducer)//branchReducer is just a random number so that some branches end up longer than others
-            
             if(Math.random()*10>9){
                 createBranch(x2,y2,branchLength,angle,color,branchPieces)
             }
-
         }
         else{
             //here is where you would draw a leaf at the end of a branch
@@ -206,11 +209,11 @@ function drawLeaf(x,y,color,radius){
 }
 
 function drawRect(x1,y1,x2,y2,color,alpha){
-    //ctx.beginPath
-    ctx.fillStyle = color
-    ctx.globalAlpha = alpha;
-    ctx.fillRect(x1, y1, x2, y2);
-    ctx.globalAlpha = 1;
+    //overlay.beginPath
+    overlay.fillStyle = color
+    overlay.globalAlpha = alpha;
+    overlay.fillRect(x1, y1, x2, y2);
+    //overlay.globalAlpha = 1;
 }
 
 
